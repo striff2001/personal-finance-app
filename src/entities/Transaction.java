@@ -3,6 +3,7 @@ package entities;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Transaction implements FileAccess {
@@ -11,9 +12,9 @@ public class Transaction implements FileAccess {
     private final UUID userId;
     private final UUID categoryId;
     private final double amount;
-    private final Calendar date;
+    private final LocalDate date;
 
-    public Transaction(UUID userId, UUID categoryId, double amount, Calendar date) {
+    public Transaction(UUID userId, UUID categoryId, double amount, LocalDate date) {
         this.id = UUID.randomUUID();
         this.userId = userId;
         this.categoryId = categoryId;
@@ -37,7 +38,7 @@ public class Transaction implements FileAccess {
         return amount;
     }
 
-    public Calendar getDate() {
+    public LocalDate getDate() {
         return date;
     }
 

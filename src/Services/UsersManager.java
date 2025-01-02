@@ -54,5 +54,33 @@ public class UsersManager {
         return id;
     }
 
+    public static UUID authorizeUser(String login, String password) {
+        String path = "./resources/users.txt";
+        String line;
+        List<String> user = null;
+        UUID id = null;
+        try {
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                if (line.contains(login) && line.contains(password)) {
+                    user = Arrays.asList(line.split(","));
+                    id = UUID.fromString(user.get(0));
+                    break;
+                }
+            }
+            if (id == null) {
+                System.out.println("Пользователь не найден");
+            }
+            scanner.close();
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+        }
+        return id;
+    }
+
+
+
 
 }

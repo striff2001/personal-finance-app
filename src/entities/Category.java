@@ -11,11 +11,13 @@ import java.util.UUID;
 public class Category implements FileAccess {
 
     private final UUID id;
-    private String flowType;
-    private String name;
+    private final UUID userID;
+    private final String flowType;
+    private final String name;
 
-    public Category(String flowType, String name) {
+    public Category(UUID userID, String flowType, String name) {
         this.id = UUID.randomUUID();
+        this.userID = userID;
         this.flowType = flowType;
         this.name = name;
     }
@@ -28,7 +30,7 @@ public class Category implements FileAccess {
     public void writeToFile() {
         String path = "./resources/categories.txt";
         try (FileWriter writer = new FileWriter(path, true)) {
-            writer.write(id.toString() + "," + flowType + "," + name + System.lineSeparator());
+            writer.write(id.toString() + "," + userID + "," + flowType + "," + name + System.lineSeparator());
         } catch (IOException e) {
             System.err.println("Ошибка при сохранении в файл: " + e.getMessage());
         }
