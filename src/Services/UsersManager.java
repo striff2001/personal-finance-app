@@ -19,10 +19,12 @@ public class UsersManager {
         this.password = password;
     }
 
-    public void createUser(UsersManager usersManager) {
+    public UUID createUser(UsersManager usersManager) {
         User newUser = new User(login, password);
         newUser.writeToFile();
         System.out.println("Пользователь создан");
+
+        return newUser.getId();
 
         // Добавить проверку на уникальность логин + пароль
 

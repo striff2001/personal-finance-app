@@ -9,10 +9,36 @@ import java.util.*;
 
 public class TransactionsManager {
 
-    public static UUID createTransaction(UUID userId, UUID categoryId, double amount, LocalDate date) {
+    public static void createTransactionWithChecks(UUID userId, UUID categoryId, double amount, LocalDate date) {
+        //Запись новой транзакции
+        TransactionsManager.createTransaction(userId, categoryId, amount, date);
+
+        //Проверка общего баланса
+        boolean balance = TransactionsManager.checkBalance(userId);
+        if (!balance) {
+            System.out.println("Расходы превысили доходы!");
+        }
+
+        //Проверка лимита на бюджет
+        String check = BudgetManager.checkBudgetLimit(userId, categoryId);
+        if (check.startsWith("Бюджет исчерпан на")) {
+            System.out.println(check);
+        }
+    }
+
+    private static void createTransaction(UUID userId, UUID categoryId, double amount, LocalDate date) {
         Transaction transaction = new Transaction(userId, categoryId, amount, date);
         transaction.writeToFile();
-        return transaction.getId();
+        BudgetManager.updateBudgetCurrentAmount(userId, categoryId, amount);
+        System.out.println("Транзакция создана");
+
+        //return transaction.getId();
+    }
+
+    private static boolean checkBalance(UUID userId) {
+        double income = Statistics.sumAllIncome(userId);
+        double expense = Statistics.sumAllExpensses(userId);
+        return income > expense;
     }
 
     public static UUID getCategoryId(UUID userId, String flowType, String name) {

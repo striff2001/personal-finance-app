@@ -12,6 +12,7 @@ public class CategoriesManager {
     String name;
 
     public CategoriesManager(UUID userID, String flowType, String name) {
+        this.userID = userID;
         this.flowType = flowType;
         this.name = name;
     }

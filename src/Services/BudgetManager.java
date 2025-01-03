@@ -93,8 +93,8 @@ public class BudgetManager {
                 line = scanner.nextLine();
                 if (line.contains(userId.toString()) && line.contains(categoryId.toString())) {
                     budget = Arrays.asList(line.split(","));
-                    limit = Double.parseDouble(budget.get(2));
-                    amount = Double.parseDouble(budget.get(3));
+                    limit = Double.parseDouble(budget.get(3));
+                    amount = Double.parseDouble(budget.get(4));
                     break;
                 }
             }
@@ -113,6 +113,43 @@ public class BudgetManager {
     }
 
     return check;
+    }
+
+    public static String checkBudgetLimit(UUID userId, UUID categoryId) {
+        String check = "";
+        double limit = 0;
+        double amount = 0;
+
+        String path = "./resources/budgets.txt";
+        String line;
+        List<String> budget = null;
+        try {
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                line = scanner.nextLine();
+                if (line.contains(userId.toString()) && line.contains(categoryId.toString())) {
+                    budget = Arrays.asList(line.split(","));
+                    limit = Double.parseDouble(budget.get(3));
+                    amount = Double.parseDouble(budget.get(4));
+                    break;
+                }
+            }
+            if (budget == null) {
+                check = "Бюджет не найден";
+            }
+            scanner.close();
+        } catch (IOException e) {
+            check = "Ошибка при чтении файла: " + e.getMessage();
+        }
+
+        if (limit <= amount) {
+            check = "Бюджет исчерпан на " + (amount - limit);
+        } else {
+            check = "До конца лимита осталось " + (limit - amount);
+        }
+
+        return check;
     }
 
     public static List<List<String>> getAllUserBudgets(UUID userID) {
