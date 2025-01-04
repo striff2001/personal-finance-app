@@ -1,5 +1,5 @@
 package entities;
-
+// Класс отражающий два типа категорий "Расходы" и "Доходы"
 public enum CashFlow {
 
     INCOME ("Доход"),

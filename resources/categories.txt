@@ -2,3 +2,4 @@ id,userId,flowType,name
 7890ea6c-8843-4e3c-9816-bba688978b3f,0fbc6b15-476b-4d19-8bb6-d66cc4d10e19,Расход,Продукты
 c6454ea6-d7e9-44d8-bc90-bfec6269f60a,0fbc6b15-476b-4d19-8bb6-d66cc4d10e19,Расход,Одежда и обувь
 990cc29c-8a6b-42ac-b2e3-19ed24cf3bd7,0fbc6b15-476b-4d19-8bb6-d66cc4d10e19,Доход,Зарплата
+20c4670a-4382-40ed-814f-599a2537d6b1,0fbc6b15-476b-4d19-8bb6-d66cc4d10e19,Расход,Обучение

@@ -1,12 +1,9 @@
 package entities;
 
-import java.util.List;
-import java.util.UUID;
-
+// Интерфейс отражающий возможность записи в файл (то есть сохранения базовой сущности в виде записи в какой-либо файл)
 public interface FileAccess {
 
+    // Метод для сохранения базовой сущности в виде записи в какой-либо файл
     public void writeToFile();
-
-    public List<String> findInFile(UUID id);
 
 }

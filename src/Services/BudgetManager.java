@@ -6,6 +6,15 @@ import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
+/*
+Класс для управления бюджетами
+    userId : UUID -- идентификатор пользователя
+    categoryId : UUID -- идентификатор категории
+    budgetLimit : double -- лимит бюджета
+    currentAmount : double -- текущие траты бюджета
+    startDate : LocalDate -- дата начала бюджета
+    endDate : LocalDate -- дата окончания бюджета
+ */
 public class BudgetManager {
     UUID userId;
     UUID categoryId;
@@ -23,13 +32,14 @@ public class BudgetManager {
         this.endDate = endDate;
     }
 
+    // Создание бюджета (запись в файл)
     public void createBudget(BudgetManager budgetManager) {
         Budget newBudget = new Budget(userId, categoryId, budgetLimit, currentAmount, startDate, endDate);
         newBudget.writeToFile();
         System.out.println("Бюджет создан");
     }
 
-
+    // Обновление текущих трат бюджета на основе новой транзакции
     public static boolean updateBudgetCurrentAmount(UUID userID, UUID categoryID, double value) {
         String path = "./resources/budgets.txt";
         List<String> lines = new ArrayList<>();
@@ -76,6 +86,7 @@ public class BudgetManager {
     }
 
 
+    // Проверка лимита бюджета для категории по типу и названию категории
     public static String checkBudgetLimit(UUID userId, String flowType, String categoryName) {
         String check = "";
         double limit = 0;
@@ -83,38 +94,44 @@ public class BudgetManager {
         CategoriesManager manager = new CategoriesManager(userId, flowType, categoryName);
         UUID categoryId = manager.getCategoryId(manager);
 
-        String path = "./resources/budgets.txt";
-        String line;
-        List<String> budget = null;
-        try {
-            File file = new File(path);
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                line = scanner.nextLine();
-                if (line.contains(userId.toString()) && line.contains(categoryId.toString())) {
+        if (categoryId != null) {
+            String path = "./resources/budgets.txt";
+            String line;
+            List<String> budget = null;
+            try {
+                File file = new File(path);
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNextLine()) {
+                    line = scanner.nextLine();
                     budget = Arrays.asList(line.split(","));
-                    limit = Double.parseDouble(budget.get(3));
-                    amount = Double.parseDouble(budget.get(4));
-                    break;
+
+                    if (budget.get(1).equals(userId.toString()) && budget.get(2).equals(categoryId.toString())) {
+
+                        limit = Double.parseDouble(budget.get(3));
+                        amount = Double.parseDouble(budget.get(4));
+                        break;
+                    }
                 }
+                if (budget == null) {
+                    check = "Бюджет не найден";
+                }
+                scanner.close();
+            } catch (IOException e) {
+                check = "Ошибка при чтении файла: " + e.getMessage();
             }
-            if (budget == null) {
-                check = "Бюджет не найден";
+
+            if (limit <= amount) {
+                check = "Бюджет исчерпан на " + (amount - limit);
+            } else {
+                check = "До конца лимита осталось " + (limit - amount);
             }
-            scanner.close();
-        } catch (IOException e) {
-            check = "Ошибка при чтении файла: " + e.getMessage();
+        } else {
+            check = "Категория не найдена";
         }
-
-    if (limit <= amount) {
-        check = "Бюджет исчерпан на " + (amount - limit);
-    } else {
-        check = "До конца лимита осталось " + (limit - amount);
-    }
-
     return check;
     }
 
+    // Проверка лимита бюджета для категории по идентификатору категории
     public static String checkBudgetLimit(UUID userId, UUID categoryId) {
         String check = "";
         double limit = 0;
@@ -152,6 +169,7 @@ public class BudgetManager {
         return check;
     }
 
+    // Получение всех бюджетов пользователя
     public static List<List<String>> getAllUserBudgets(UUID userID) {
         String path = "./resources/budgets.txt";
         String line;

@@ -5,8 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+/*
+Класс для создания различных расчетов. Предоставляет набор статических методов.
+ */
 public class Statistics {
-    //Подсчет общих доходов и расходов
+    //Подсчет всех доходов
     protected static Double sumAllIncome(UUID userID) {
         String path = "./resources/transactions.txt";
         double income = 0;
@@ -37,6 +40,7 @@ public class Statistics {
         return income;
     }
 
+    // Подсчет всех расходов
     protected static Double sumAllExpensses(UUID userID) {
         String path = "./resources/transactions.txt";
         double expensses = 0;
@@ -67,6 +71,7 @@ public class Statistics {
         return expensses;
     }
 
+    // Вывод на экран пользователя подсчета всех доходов и расходов и их разница
     public static void printIncomeAndExpenses(UUID userID) {
         double income = Statistics.sumAllIncome(userID);
         double expensses = Statistics.sumAllExpensses(userID);
@@ -75,6 +80,7 @@ public class Statistics {
         System.out.println("Разница: " + (income - expensses));
     }
 
+    // Подсчет всех операций по категории
     public static Double sumByCategory(UUID userID,String flowType, String name) {
         String path = "./resources/transactions.txt";
         double value = 0;
@@ -107,6 +113,7 @@ public class Statistics {
         return value;
     }
 
+    // Получение всех бюджетов пользователя с заменой идентификатора категории на название категории и подсчетом остатка лимита
     private static List<List<String>> getAllBudgetsCategories(UUID userID) {
         List<List<String>> allUserCategories = CategoriesManager.getAllUserCategories(userID);
         List<List<String>> allUserBudgets = BudgetManager.getAllUserBudgets(userID);
@@ -139,6 +146,7 @@ public class Statistics {
         return budgetsCategories;
     }
 
+    // Вывод на экран всех бюджетов пользователя с подсчетом остатка лимита
     public static void printAllBudgetsCategories(UUID userID) {
         List<List<String>> budgetsCategories = Statistics.getAllBudgetsCategories(userID);
         System.out.println("| Категория | Лимит | Текущий расход | Остаток лимита | Дата начала | Дата конца |");
@@ -148,6 +156,7 @@ public class Statistics {
         }
     }
 
+    // Сохранение всех бюджетов пользователя с подсчетом остатка лимита в файл
     public static void saveAllBudgetsCategoriesToFile(UUID userID, String name) {
         List<List<String>> budgetsCategories = Statistics.getAllBudgetsCategories(userID);
         String path = "./output/" + name + ".txt";

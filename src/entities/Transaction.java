@@ -1,11 +1,18 @@
 package entities;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
+/*
+Класс отражающий сущность транзакции пользователя
+    id : UUID -- идентификатор транзакции
+    userId : UUID -- идентификатор пользователя
+    categoryId : UUID -- идентификатор категории
+    amount : double -- сумма транзакции
+    date : LocalDate -- дата транзакции
+ */
 public class Transaction implements FileAccess {
 
     private final UUID id;
@@ -51,27 +58,5 @@ public class Transaction implements FileAccess {
             System.err.println("Ошибка при сохранении в файл: " + e.getMessage());
         }
 
-    }
-
-    @Override
-    public List<String> findInFile(UUID id) {
-        String path = "./resources/transactions.txt";
-        String line;
-        List<String> transaction = null;
-        String lineID = id.toString();
-        try {
-            File file = new File(path);
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                line = scanner.nextLine();
-                if (line.contains(lineID)) {
-                    transaction = Arrays.asList(line.split(","));
-                }
-            }
-            scanner.close();
-        } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла: " + e.getMessage());
-        }
-        return transaction;
     }
 }

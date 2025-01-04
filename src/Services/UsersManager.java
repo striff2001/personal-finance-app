@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+/*
+Класс для управления пользователями
+    login : String -- логин пользователя
+    password : String -- пароль пользователя
+ */
 public class UsersManager {
 
     String login;
@@ -19,6 +24,8 @@ public class UsersManager {
         this.password = password;
     }
 
+    // Создание пользователя (запись в файл)
+    // Возвращаем UUID пользователя для дальнейшей работы с его идентификатором после регистрации
     public UUID createUser(UsersManager usersManager) {
         User newUser = new User(login, password);
         newUser.writeToFile();
@@ -26,10 +33,12 @@ public class UsersManager {
 
         return newUser.getId();
 
-        // Добавить проверку на уникальность логин + пароль
+        // Можно добавить проверку на уникальность логин + пароль
 
     }
 
+    // Авторизация пользователя
+    // Возвращаем UUID пользователя для дальнейшей работы с его идентификатором
     public UUID authorizeUser(UsersManager usersManager) {
         String path = "./resources/users.txt";
         String line;
@@ -56,6 +65,8 @@ public class UsersManager {
         return id;
     }
 
+    // Авторизация пользователя
+    // Возвращаем UUID пользователя для дальнейшей работы с его идентификатором
     public static UUID authorizeUser(String login, String password) {
         String path = "./resources/users.txt";
         String line;
@@ -66,8 +77,8 @@ public class UsersManager {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
-                if (line.contains(login) && line.contains(password)) {
-                    user = Arrays.asList(line.split(","));
+                user = Arrays.asList(line.split(","));
+                if (user.get(1).equals(login) && user.get(2).equals(password)) {
                     id = UUID.fromString(user.get(0));
                     break;
                 }
@@ -81,8 +92,4 @@ public class UsersManager {
         }
         return id;
     }
-
-
-
-
 }

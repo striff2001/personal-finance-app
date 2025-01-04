@@ -6,6 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/*
+Класс для управления категориями
+    userID : UUID -- идентификатор пользователя
+    flowType : String -- тип расходов (доходы/расходы)
+    name : String -- название категории
+ */
 public class CategoriesManager {
     UUID userID;
     String flowType;
@@ -17,12 +23,14 @@ public class CategoriesManager {
         this.name = name;
     }
 
+    // Создание категории (запись в файл)
     public void createCategory(CategoriesManager categoriesManager) {
         Category newCategory = new Category(userID, flowType, name);
         newCategory.writeToFile();
         System.out.println("Категория создана");
     }
 
+    // Получение идентификатора категории
     public UUID getCategoryId(CategoriesManager manager) {
         String path = "./resources/categories.txt";
         String line;
@@ -49,6 +57,7 @@ public class CategoriesManager {
         return id;
     }
 
+    // Получение полной информации о категории из файла (получение записи из файла по идентификатору (UUID) категории)
     public static List<String> getCategory(UUID id) {
         String path = "./resources/categories.txt";
         String line;
@@ -70,6 +79,7 @@ public class CategoriesManager {
         return category;
     }
 
+    // Получение полной информации о категории из файла (получение записи из файла по идентификатору (String) категории)
     public static List<String> getCategory(String id) {
         String path = "./resources/categories.txt";
         String line;
@@ -91,6 +101,7 @@ public class CategoriesManager {
         return category;
     }
 
+    // Получение всех категорий пользователя
     public static List<List<String>> getAllUserCategories(UUID userID) {
         String path = "./resources/categories.txt";
         String line;

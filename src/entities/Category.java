@@ -1,13 +1,17 @@
 package entities;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
+/*
+Класс отражающий сущность категории доходов или расходов для конкретного пользователя
+    id : UUID -- идентификатор категории
+    userID : UUID -- идентификатор пользователя
+    flowType : String -- тип расходов (доходы/расходы)
+    name : String -- название категории
+
+ */
 public class Category implements FileAccess {
 
     private final UUID id;
@@ -36,28 +40,4 @@ public class Category implements FileAccess {
         }
 
     }
-
-    @Override
-    public List<String> findInFile(UUID id) {
-        String path = "./resources/categories.txt";
-        String line;
-        List<String> category = null;
-        String lineID = id.toString();
-        try {
-            File file = new File(path);
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                line = scanner.nextLine();
-                if (line.contains(lineID)) {
-                    category = Arrays.asList(line.split(","));
-                }
-            }
-            scanner.close();
-        } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла: " + e.getMessage());
-        }
-        return category;
-    }
-
-
 }
